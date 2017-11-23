@@ -1,0 +1,91 @@
+{
+  "errorThreshold": 20,
+  "duplicatesThreshold": 10,
+  "outerDuplicatesThreshold": 10,
+  "totalDuplicatesThreshold":10,
+  "header": true,
+  "dateFormat": "yyyy-MM-dd HH:mm:ss+hh",
+  "fields": [
+    {
+      "name": "ID",
+      "unique": false,
+      "type": "StringType"
+    },
+    {
+      "name": "Time",
+      "targetName": "operation_ts",
+      "type": "TimestampType",
+      "filter": {
+        "range": ["${period.start_ts}", "${period.end_ts}"]
+      }
+    },
+    {
+      "name": "Date",
+      "unique": false,
+      "type": "StringType"
+    },
+    {
+      "name": "Class group",
+      "unique": false,
+      "type": "StringType"
+    },
+    {
+      "name": "Class",
+      "targetName": "privilege_type",
+      "type": "StringType"
+    },
+    {
+      "name": "Tariff",
+      "targetName": "payment_nominal",
+      "type": "StringType"
+    },
+    {
+      "name": "Visa Financing",
+      "unique": false,
+      "type": "StringType"
+    },
+    {
+      "name": "Gett Financing",
+      "targetName": "merchant_financing",
+      "type": "StringType"
+    },
+    {
+      "name": "Client price",
+      "targetName": "payment_real",
+      "type": "StringType"
+    },
+    {
+      "name": "Последние 4 цифры карты",
+      "targetName": "card_number",
+      "type": "StringType"
+    },
+    {
+      "name": "Тип карты",
+      "unique": false,
+      "nullable": true,
+      "type": "StringType"
+    },
+    {
+      "name": "Bin",
+      "targetName": "bank_id",
+      "nullable": true,
+      "type": "IntegerType"
+    },
+    {
+      "name": "Card level",
+      "targetName": "card_type",
+      "nullable": true,
+      "type": "StringType"
+    },
+    {
+      "name": "Airport transfer",
+      "unique": false,
+      "type": "StringType"
+    },
+    {
+      "name": "Coupon applied",
+      "unique": false,
+      "type": "StringType"
+    }
+  ]
+}
