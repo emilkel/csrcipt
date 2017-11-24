@@ -149,3 +149,7 @@ print("type", incorrect_type_rows)
 completed_row = incorrect_type_rows and incorrect_null_rows
 print("complete", completed_row)
 
+correct_rows = [r for r in rows[1:] if completed_row]
+incorrect_rows = [r for r in rows[1:] if not completed_row]
+print(correct_rows)
+print(incorrect_rows)
