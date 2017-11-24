@@ -27,8 +27,9 @@ def parse_format(filepath: str, all_rows: list) -> dict:
 def check_header(header: list, fields: list) -> bool:
 
     row_count = sum(1 for row in header)
-    if (row_count < 15):
+    if (row_count < 10):
         print("there is not enough data")
+        return False
     column_names = []
     print(row_count)
     for i in range(0, row_count):
@@ -37,11 +38,12 @@ def check_header(header: list, fields: list) -> bool:
                 column_names.append(header[i])
                 print("found " + header[i])
                 break
-
+    if len(column_names) < 10:
+        return False
     """Проверяет, соответствует ли header формату"""
     return True
 
-
+'''
 def check_nullable(row: list, fields: list) -> bool:
 
     incor_null_rows = []
@@ -79,7 +81,7 @@ def check_nullable(row: list, fields: list) -> bool:
     """Проверяет, что пропущены только допустимые поля"""
     return True
 
-'''
+
 def check_types(row: list, fields: dict) -> bool:
     """Проверяет, что типы полей в строке соответствует полям в формате"""
     return True
