@@ -16,13 +16,14 @@ def parse_format(filepath: str, all_rows: list) -> dict:
 
     data = json.load(open(filepath, encoding="utf-8"))
     column_names = [[] for i in range(3)]
-    for j in range(0, 15):
-        column_names[0].append(data['fields'][j]['name'])
-        if 'nullable' not in data['fields'][j]:
-            column_names[1].append(False)
-        else:
-            column_names[1].append(True)
-        column_names[2].append(data['fields'][j]['type'])
+    col_number = len(data['fields'])
+    for i in range(0, len(all_rows)):
+        for j in range(0, col_number):
+            if (data['fields'][j]['name'] == all_rows[i]):
+                column_names[0].append(data['fields'][j]['name'])
+                column_names[1].append('nullable' in data['fields'][j])
+                column_names[2].append(data['fields'][j]['type'])
+    print("column:", column_names)
     #"""Парсит файл с форматом и возвращает словарь"""
     return column_names
 
@@ -30,9 +31,6 @@ def parse_format(filepath: str, all_rows: list) -> dict:
 def check_header(header: list, fields: list) -> bool:
 
     row_count = sum(1 for row in header)
-    if (row_count < 10):
-        print("there is not enough data")
-        return False
     column_names = []
     print(row_count)
     for i in range(0, row_count):
@@ -41,8 +39,6 @@ def check_header(header: list, fields: list) -> bool:
                 column_names.append(header[i])
                 print("found " + header[i])
                 break
-    if len(column_names) < 10:
-        return False
     """Проверяет, соответствует ли header формату"""
     return True
 
@@ -54,27 +50,12 @@ def check_nullable(row: list, fields: list) -> bool:
     incorrect_null_rows = []
     for i, elem in enumerate(row):
         for j in range(0, row_count):
-            if (elem[j] == "" and fields[1][j] is True):
-                incor_null_rows.append(True)
-            elif (elem[j]):
-                incor_null_rows.append(True)
-            else:
-                incor_null_rows.append(False)
-        x = 0
-        length = len(incor_null_rows)
-        while True:
-            if (x >= length):
-                incorrect_null_rows.append(True)
-                incor_null_rows.clear()
+            #print(fields[1][j])
+            if (elem[j] == "" and fields[1][j] is False):
+                incorrect_null_rows.append(False)
                 break
-            else:
-                if (incor_null_rows[x] == True):
-                    x += 1
-                else:
-                    incorrect_null_rows.append(False)
-                    incor_null_rows.clear()
-                    break
-
+        else:
+            incorrect_null_rows.append(True)
 
     print("Check nullable:", incorrect_null_rows)
 
@@ -88,49 +69,34 @@ def check_types(row: list, fields: list) -> bool:
     incorrect_type_rows = []
     for i, elem in enumerate(row):
         for j in range(0, row_count):
-            if (elem[j] and fields[2][j] == "StringType"):
+            #print(isinstance(elem[j], int), fields[2][j],elem[j],"\t")
+            if (elem[j] and fields[2][j] == "IntegerType"):
                 try:
-                    str(elem[j])
-                    incor_type_rows.append(True)
+                    int(elem[j])
                 except ValueError:
-                    incor_type_rows.append(False)
+                    incorrect_type_rows.append(False)
+                    break
+#"%Y-%m-%d %H:%M:%S+03"
+
             elif (elem[j] and fields[2][j] == "TimestampType"):
                 try:
                     datetime_object = datetime.datetime.strptime(elem[j], "%Y-%m-%d %H:%M:%S+03")
-                    incor_type_rows.append(True)
                 except ValueError:
-                    incor_type_rows.append(False)
-            else:
-                try:
-                    int(elem[j])
-                    incor_type_rows.append(True)
-                except ValueError:
-                    incor_type_rows.append(False)
-        x = 0
-        length = len(incor_type_rows)
-        while True:
-            if (x >= length):
-                incorrect_type_rows.append(False)
-                incor_type_rows.clear()
-                break
-            else:
-                if (incor_type_rows[x] == False):
-                    x += 1
-                else:
-                    incorrect_type_rows.append(True)
-                    incor_type_rows.clear()
+                    incorrect_type_rows.append(False)
                     break
-
+        else:
+            incorrect_type_rows.append(True)
     print("Check type: ", incorrect_type_rows)
     """Проверяет, что типы полей в строке соответствует полям в формате"""
     return incorrect_type_rows
 
 
 def main():
-    all_rows = parse_csv("gett.csv")
+    parse_file = "test2.csv"
+    #file_par = input()
+    all_rows = parse_csv(parse_file)
     header = all_rows[0]
     rows = all_rows[1:]
-
     f = parse_format("gett.json", header)
     if not check_header(header, f):
         print("Wrong header!")
@@ -148,6 +114,9 @@ def main():
     print("Incorrected rows: ", incorrect_rows)
 
 
-
 if __name__ == '__main__':
     main()
+
+
+
+
