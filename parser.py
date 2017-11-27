@@ -16,8 +16,10 @@ def parse_format(filepath: str, all_rows: list) -> dict:
 
     data = json.load(open(filepath, encoding="utf-8"))
     column_names = [[] for i in range(3)]
-    for j in range(0, 15):
+    # не надо хардкодить значения (может быть больше 15 полей)
+    for j in range(0, 15):                      
         column_names[0].append(data['fields'][j]['name'])
+        # Следующие 4 строки можно поменять на column_names[1].append('nullable' in data['fields'][j])
         if 'nullable' not in data['fields'][j]:
             column_names[1].append(False)
         else:
@@ -30,13 +32,19 @@ def parse_format(filepath: str, all_rows: list) -> dict:
 def check_header(header: list, fields: list) -> bool:
 
     row_count = sum(1 for row in header)
+    # Почему 10?
     if (row_count < 10):
         print("there is not enough data")
         return False
+    # if len(header) != len(dict):
+    #   return False
     column_names = []
     print(row_count)
     for i in range(0, row_count):
+        # if header[i] not in dict:
+        #   return False
         for j in range(0, 15):
+            # Не проверяется случай, когда в header'е больше полей, чем в формате
             if (fields[0][j] == header[i]):
                 column_names.append(header[i])
                 print("found " + header[i])
@@ -54,12 +62,18 @@ def check_nullable(row: list, fields: list) -> bool:
     incorrect_null_rows = []
     for i, elem in enumerate(row):
         for j in range(0, row_count):
+            # В условии if не нужны скобки
             if (elem[j] == "" and fields[1][j] is True):
                 incor_null_rows.append(True)
             elif (elem[j]):
                 incor_null_rows.append(True)
             else:
+                # incorrect_null_rows.append(False)
+                # break
                 incor_null_rows.append(False)
+        # else:
+        #   incorrect_null_rows.append(True)
+
         x = 0
         length = len(incor_null_rows)
         while True:
@@ -125,6 +139,10 @@ def check_types(row: list, fields: list) -> bool:
     """Проверяет, что типы полей в строке соответствует полям в формате"""
     return incorrect_type_rows
 
+
+# def parse(registry_path, format_path):
+#   ...
+#   return correct_rows, incorrect_rows
 
 def main():
     all_rows = parse_csv("gett.csv")
