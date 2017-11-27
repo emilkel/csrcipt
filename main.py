@@ -26,7 +26,7 @@ with open("gett.csv", 'r', encoding = "utf-8", ) as csvfile:
     column_names = [];
     row_count = sum(1 for row in reader)
     print(row_count)
-    row_count += 2
+    #row_count += 2
     #for i  in range(0, row_count):
         #if ()
     csvfile.seek(0)

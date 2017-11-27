@@ -35,11 +35,16 @@ with open("gett.csv", 'r', encoding = "utf-8", ) as csvfile:
         content = first_row[i]
         for j in range (x, 15):
             if(data['fields'][j]['name'] == content):
-                print("found " + content)
+                #print("found " + content)
                 #x += 1
                 break
-            else:
-                print("1111")
+
+                #print("1111")
+
+    x = [[] for i in range(3)]
+    x[0].append(1)
+    print(x)
+
 
 
 #print(first_row[i])
