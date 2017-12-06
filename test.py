@@ -1,14 +1,11 @@
 import unittest, csv, os
 # THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-from csv_parser import test
+import csv_parser
 
 
-class TestStringMethods(unittest.TestCase):
+class TestScript(unittest.TestCase):
     def test_1(self):
-        #parser.
-        #self.assertEqual('foo'.upper(), 'FOO')
-        self.assertEqual(test(), 1)
-        #self.assertCo
+        self.assertEqual(len(csv_parser.main()), 12)
 
 
 if __name__ == '__main__':
